@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>軟糖媽咪Ivy的數據工具教學</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Noto Sans TC', sans-serif; background: #eef3f9; color: #3a3a3a; }
+
+  .wrap { max-width: 1000px; margin: 0 auto; padding: 1.5rem 1rem; }
+
+  /* Header */
+  .header { display: flex; align-items: center; justify-content: space-between; padding: 1.25rem 1.5rem; margin-bottom: 1.5rem; background: linear-gradient(120deg, #dae8f0 0%, #e8eef4 50%, #dde8f8 100%); border-radius: 20px; border: 1px solid #c4d4df; }
+  .header-left { display: flex; align-items: center; gap: 14px; }
+  .avatar { width: 52px; height: 52px; border-radius: 50%; background: #fff; display: flex; align-items: center; justify-content: center; font-size: 24px; flex-shrink: 0; overflow: hidden; border: 2px solid #b8cedd; }
+  .avatar img { width: 100%; height: 100%; object-fit: cover; }
+  .blog-name { font-size: 16px; font-weight: 700; color: #3a6e8c; }
+  .blog-bio { font-size: 12px; color: #7aa0b0; margin-top: 3px; }
+  .social-links { display: flex; gap: 8px; }
+  .social-btn { width: 34px; height: 34px; border-radius: 50%; border: 1px solid #b8cedd; background: rgba(255,255,255,0.7); display: flex; align-items: center; justify-content: center; cursor: pointer; text-decoration: none; transition: background 0.2s; }
+  .social-btn:hover { background: rgba(255,255,255,0.95); }
+  .social-btn svg { width: 16px; height: 16px; }
+
+  /* Filters */
+  .filters { display: flex; flex-direction: column; gap: 8px; margin-bottom: 1.5rem; background: rgba(255,255,255,0.75); border-radius: 14px; padding: 12px 14px; border: 1px solid #ccd8e4; }
+  .filter-row { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+  .filter-label { font-size: 11px; color: #88a8b8; min-width: 28px; font-weight: 500; }
+  .pill { padding: 5px 13px; border-radius: 20px; font-size: 12px; cursor: pointer; border: 1px solid #c4d4e0; background: rgba(255,255,255,0.8); color: #5a82a0; transition: all 0.15s; user-select: none; }
+  .pill:hover { border-color: #8cb4c8; color: #3a628a; background: #fff; }
+  .pill.on { background: #5a9ec8; color: #fff; border-color: #5a9ec8; font-weight: 500; }
+
+  /* Grid */
+  .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+  @media (max-width: 700px) { .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 420px) { .grid { grid-template-columns: 1fr; } }
+
+  /* Card */
+  .card { background: rgba(255,255,255,0.92); border: 1px solid #ccd8e8; border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; transition: transform 0.2s, box-shadow 0.2s; }
+  .card:hover { transform: translateY(-3px); box-shadow: 0 8px 28px rgba(80,140,185,0.16); }
+  .card.hidden { display: none; }
+
+  /* Video thumbnail area */
+  .video-wrap { position: relative; width: 100%; aspect-ratio: 16/9; background: #1a1a2e; overflow: hidden; }
+  .video-wrap iframe { width: 100%; height: 100%; border: none; display: block; }
+  .video-thumb { position: relative; width: 100%; height: 100%; cursor: pointer; }
+  .video-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .play-btn { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 52px; height: 52px; border-radius: 50%; background: rgba(255,255,255,0.92); display: flex; align-items: center; justify-content: center; transition: transform 0.2s, background 0.2s; pointer-events: none; }
+  .play-btn svg { width: 22px; height: 22px; margin-left: 3px; }
+  .video-thumb:hover .play-btn { transform: translate(-50%, -50%) scale(1.1); background: #fff; }
+  .cat-badge { position: absolute; top: 9px; left: 9px; padding: 3px 9px; border-radius: 20px; font-size: 10px; font-weight: 500; z-index: 2; }
+  .diff-badge { position: absolute; top: 9px; right: 9px; padding: 3px 9px; border-radius: 20px; font-size: 10px; background: rgba(255,255,255,0.88); color: #555; z-index: 2; }
+
+  /* Category colors */
+  .cat-函數公式 { background: #dde8fe; color: #3a58c0; }
+  .cat-樞紐分析 { background: #dff2ea; color: #3a8a66; }
+  .cat-圖表 { background: #fef4e4; color: #b07830; }
+  .cat-資料整理 { background: #fce8f5; color: #c06898; }
+  .cat-快捷技巧 { background: #ece4fe; color: #7050c0; }
+  .cat-進階應用 { background: #feeaea; color: #b83030; }
+
+  /* Difficulty badge colors */
+  .diff-入門 { background: rgba(220,255,230,0.9); color: #2a7a46; }
+  .diff-進階 { background: rgba(255,240,200,0.9); color: #8a6010; }
+  .diff-高手 { background: rgba(255,225,225,0.9); color: #9a2020; }
+
+  /* Card body */
+  .body { padding: 11px 13px 13px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
+  .card-date { font-size: 10px; color: #a8b8cc; }
+  .card-title { font-size: 13px; font-weight: 700; color: #2a4a60; line-height: 1.45; }
+  .card-excerpt { font-size: 11px; color: #7a90a0; line-height: 1.75; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+  .chips { display: flex; flex-wrap: wrap; gap: 4px; margin-top: auto; padding-top: 8px; border-top: 1px solid #e4eef4; }
+  .chip { padding: 4px 9px; border-radius: 20px; font-size: 10px; font-weight: 500; border: 1px solid; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 3px; transition: opacity 0.15s; }
+  .chip:hover { opacity: 0.72; }
+  .chip-yt { background: #feeaea; color: #b83030; border-color: #f0a0a0; }
+  .chip-ig { background: #fce8f5; color: #c06898; border-color: #e8a8d0; }
+  .chip-dl { background: #dde8fe; color: #3a58c0; border-color: #a0b4e8; }
+  .chip-watch { background: #5a9ec8; color: #fff; border-color: #5a9ec8; }
+
+  /* Coming soon */
+  .coming-soon-thumb { position: relative; width: 100%; height: 100%; background: #eaf0f8; display: flex; align-items: center; justify-content: center; }
+  .coming-soon-inner { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+  .coming-soon-icon { font-size: 28px; opacity: 0.45; }
+  .coming-soon-text { font-size: 12px; font-weight: 700; color: #8aa8c0; letter-spacing: 1px; }
+  .coming-soon-title { color: #a8b8cc !important; }
+  .coming-soon-excerpt { color: #b8c8d8 !important; }
+
+  /* Duration badge */
+  .duration-badge { position: absolute; bottom: 8px; right: 8px; background: rgba(0,0,0,0.72); color: #fff; font-size: 10px; padding: 2px 7px; border-radius: 4px; z-index: 2; letter-spacing: 0.3px; }
+
+  /* No results */
+  .no-results { grid-column: 1/-1; text-align: center; padding: 3rem 0; color: #b8c8d8; font-size: 14px; display: none; }
+
+  /* Stats bar */
+  .stats-bar { display: flex; gap: 16px; margin-bottom: 1.2rem; flex-wrap: wrap; }
+  .stat { background: rgba(255,255,255,0.8); border: 1px solid #ccd8e4; border-radius: 10px; padding: 8px 14px; font-size: 11px; color: #7a90a0; }
+  .stat strong { color: #2a4a60; font-size: 14px; display: block; font-weight: 700; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="header">
+    <div class="header-left">
+      <div class="avatar"><img src="icon-192.png" alt="軟糖媽咪Ivy" onerror="this.parentElement.innerHTML='🍬'"></div>
+      <div>
+        <div class="blog-name">軟糖媽咪Ivy的數據工具教學</div>
+        <div class="blog-bio">Excel｜函數公式｜樞紐分析｜資料視覺化</div>
+      </div>
+    </div>
+    <div class="social-links">
+      <a class="social-btn" href="https://www.instagram.com/ivyhuanglichia" target="_blank" title="Instagram">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#c13584" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="#c13584" stroke="none"/></svg>
+      </a>
+      <a class="social-btn" href="https://youtube.com/channel/UC80zKCgzP-OPnzbIzzC47Rg" target="_blank" title="YouTube">
+        <svg viewBox="0 0 24 24" fill="#ff0000"><path d="M23 7s-.3-2-1.2-2.8c-1.1-1.2-2.4-1.2-3-1.3C16.2 2.8 12 2.8 12 2.8s-4.2 0-6.8.1c-.6.1-1.9.1-3 1.3C1.3 5 1 7 1 7S.7 9.1.7 11.3v2c0 2.1.3 4.2.3 4.2s.3 2 1.2 2.8c1.1 1.2 2.6 1.1 3.3 1.2C7.5 21.6 12 21.6 12 21.6s4.2 0 6.8-.2c.6-.1 1.9-.1 3-1.3.9-.8 1.2-2.8 1.2-2.8s.3-2.1.3-4.2v-2C23.3 9.1 23 7 23 7zM9.7 15.5V8.4l8.1 3.6-8.1 3.5z"/></svg>
+      </a>
+      <a class="social-btn" href="https://www.threads.com/@ivyhuanglichia" target="_blank" title="Threads">
+        <svg viewBox="0 0 24 24" fill="#1a1a1a"><path d="M12.9 11.5c-.2-.1-2.5-.7-3.5-.3-.5.2-.8.6-.8 1.1 0 .6.4 1 1.2 1.3 1.5.5 3.2-.1 3.8-1.4.1-.2.2-.4.2-.7h-.9zm1.5-1.7c-.5-.9-1.4-1.5-2.4-1.7-1.4-.3-2.8.1-3.8 1.1-.8.8-1.2 2-1.1 3.1.1 1.3.8 2.4 1.9 3 .9.5 2 .6 3 .3 1.2-.4 2.2-1.3 2.6-2.5.5-1.2.4-2.4-.2-3.3zm3.1-4c-1.4-1.7-3.5-2.7-5.7-2.7-2 0-3.9.8-5.3 2.2C5.2 6.7 4.5 8.8 4.6 11c.1 2.1 1 4 2.6 5.4 1.5 1.3 3.5 2 5.5 1.9 1.7-.1 3.4-.7 4.7-1.9 1.4-1.3 2.2-3.1 2.2-5 0-1.5-.5-3-1.5-4.1l-.6-.5z"/></svg>
+      </a>
+      <a class="social-btn" href="https://www.facebook.com/share/1ByQokkJ1g/" target="_blank" title="Facebook">
+        <svg viewBox="0 0 24 24" fill="#1877f2"><path d="M24 12.1C24 5.4 18.6 0 12 0S0 5.4 0 12.1C0 18.1 4.4 23.1 10.1 24v-8.4H7.1v-3.5h3V9.7c0-3 1.8-4.7 4.5-4.7 1.3 0 2.7.2 2.7.2v3h-1.5c-1.5 0-2 .9-2 1.9v2.2h3.3l-.5 3.5H13.8V24C19.6 23.1 24 18.1 24 12.1z"/></svg>
+      </a>
+    </div>
+  </div>
+
+  <div class="filters">
+    <div class="filter-row" id="cat-filters">
+      <span class="filter-label">分類</span>
+      <span class="pill on" data-cat="all">全部</span>
+      <span class="pill" data-cat="函數公式">函數公式</span>
+      <span class="pill" data-cat="樞紐分析">樞紐分析</span>
+      <span class="pill" data-cat="圖表">圖表</span>
+      <span class="pill" data-cat="資料整理">資料整理</span>
+      <span class="pill" data-cat="快捷技巧">快捷技巧</span>
+      <span class="pill" data-cat="進階應用">進階應用</span>
+    </div>
+    <div class="filter-row" id="diff-filters">
+      <span class="filter-label">難度</span>
+      <span class="pill on" data-diff="all">全部</span>
+      <span class="pill" data-diff="入門">入門</span>
+      <span class="pill" data-diff="進階">進階</span>
+      <span class="pill" data-diff="高手">高手</span>
+    </div>
+  </div>
+
+  <div class="grid" id="grid">
+
+    <!-- 待上線 #1 -->
+    <div class="card" data-cat="函數公式" data-diff="入門">
+      <div class="video-wrap">
+        <div class="coming-soon-thumb">
+          <span class="cat-badge cat-函數公式">函數公式</span>
+          <span class="diff-badge diff-入門">入門</span>
+          <div class="coming-soon-inner">
+            <div class="coming-soon-icon">🎬</div>
+            <div class="coming-soon-text">即將上線</div>
+          </div>
+        </div>
+      </div>
+      <div class="body">
+        <div class="card-date">敬請期待</div>
+        <div class="card-title coming-soon-title">影片製作中…</div>
+        <div class="card-excerpt coming-soon-excerpt">軟糖媽咪 Ivy 正在錄製這支教學影片，完成後會第一時間上線！</div>
+      </div>
+    </div>
+
+    <!-- 待上線 #2 -->
+    <div class="card" data-cat="樞紐分析" data-diff="入門">
+      <div class="video-wrap">
+        <div class="coming-soon-thumb">
+          <span class="cat-badge cat-樞紐分析">樞紐分析</span>
+          <span class="diff-badge diff-入門">入門</span>
+          <div class="coming-soon-inner">
+            <div class="coming-soon-icon">🎬</div>
+            <div class="coming-soon-text">即將上線</div>
+          </div>
+        </div>
+      </div>
+      <div class="body">
+        <div class="card-date">敬請期待</div>
+        <div class="card-title coming-soon-title">影片製作中…</div>
+        <div class="card-excerpt coming-soon-excerpt">軟糖媽咪 Ivy 正在錄製這支教學影片，完成後會第一時間上線！</div>
+      </div>
+    </div>
+
+    <!-- 待上線 #3 -->
+    <div class="card" data-cat="函數公式" data-diff="進階">
+      <div class="video-wrap">
+        <div class="coming-soon-thumb">
+          <span class="cat-badge cat-函數公式">函數公式</span>
+          <span class="diff-badge diff-進階">進階</span>
+          <div class="coming-soon-inner">
+            <div class="coming-soon-icon">🎬</div>
+            <div class="coming-soon-text">即將上線</div>
+          </div>
+        </div>
+      </div>
+      <div class="body">
+        <div class="card-date">敬請期待</div>
+        <div class="card-title coming-soon-title">影片製作中…</div>
+        <div class="card-excerpt coming-soon-excerpt">軟糖媽咪 Ivy 正在錄製這支教學影片，完成後會第一時間上線！</div>
+      </div>
+    </div>
+
+    <!-- 待上線 #4 -->
+    <div class="card" data-cat="圖表" data-diff="進階">
+      <div class="video-wrap">
+        <div class="coming-soon-thumb">
+          <span class="cat-badge cat-圖表">圖表</span>
+          <span class="diff-badge diff-進階">進階</span>
+          <div class="coming-soon-inner">
+            <div class="coming-soon-icon">🎬</div>
+            <div class="coming-soon-text">即將上線</div>
+          </div>
+        </div>
+      </div>
+      <div class="body">
+        <div class="card-date">敬請期待</div>
+        <div class="card-title coming-soon-title">影片製作中…</div>
+        <div class="card-excerpt coming-soon-excerpt">軟糖媽咪 Ivy 正在錄製這支教學影片，完成後會第一時間上線！</div>
+      </div>
+    </div>
+
+    <!-- 待上線 #5 -->
+    <div class="card" data-cat="資料整理" data-diff="進階">
+      <div class="video-wrap">
+        <div class="coming-soon-thumb">
+          <span class="cat-badge cat-資料整理">資料整理</span>
+          <span class="diff-badge diff-進階">進階</span>
+          <div class="coming-soon-inner">
+            <div class="coming-soon-icon">🎬</div>
+            <div class="coming-soon-text">即將上線</div>
+          </div>
+        </div>
+      </div>
+      <div class="body">
+        <div class="card-date">敬請期待</div>
+        <div class="card-title coming-soon-title">影片製作中…</div>
+        <div class="card-excerpt coming-soon-excerpt">軟糖媽咪 Ivy 正在錄製這支教學影片，完成後會第一時間上線！</div>
+      </div>
+    </div>
+
+    <!-- 待上線 #6 -->
+    <div class="card" data-cat="快捷技巧" data-diff="入門">
+      <div class="video-wrap">
+        <div class="coming-soon-thumb">
+          <span class="cat-badge cat-快捷技巧">快捷技巧</span>
+          <span class="diff-badge diff-入門">入門</span>
+          <div class="coming-soon-inner">
+            <div class="coming-soon-icon">🎬</div>
+            <div class="coming-soon-text">即將上線</div>
+          </div>
+        </div>
+      </div>
+      <div class="body">
+        <div class="card-date">敬請期待</div>
+        <div class="card-title coming-soon-title">影片製作中…</div>
+        <div class="card-excerpt coming-soon-excerpt">軟糖媽咪 Ivy 正在錄製這支教學影片，完成後會第一時間上線！</div>
+      </div>
+    </div>
+
+    <!-- 待上線 #7 -->
+    <div class="card" data-cat="進階應用" data-diff="高手">
+      <div class="video-wrap">
+        <div class="coming-soon-thumb">
+          <span class="cat-badge cat-進階應用">進階應用</span>
+          <span class="diff-badge diff-高手">高手</span>
+          <div class="coming-soon-inner">
+            <div class="coming-soon-icon">🎬</div>
+            <div class="coming-soon-text">即將上線</div>
+          </div>
+        </div>
+      </div>
+      <div class="body">
+        <div class="card-date">敬請期待</div>
+        <div class="card-title coming-soon-title">影片製作中…</div>
+        <div class="card-excerpt coming-soon-excerpt">軟糖媽咪 Ivy 正在錄製這支教學影片，完成後會第一時間上線！</div>
+      </div>
+    </div>
+
+    <!-- 待上線 #8 -->
+    <div class="card" data-cat="快捷技巧" data-diff="入門">
+      <div class="video-wrap">
+        <div class="coming-soon-thumb">
+          <span class="cat-badge cat-快捷技巧">快捷技巧</span>
+          <span class="diff-badge diff-入門">入門</span>
+          <div class="coming-soon-inner">
+            <div class="coming-soon-icon">🎬</div>
+            <div class="coming-soon-text">即將上線</div>
+          </div>
+        </div>
+      </div>
+      <div class="body">
+        <div class="card-date">敬請期待</div>
+        <div class="card-title coming-soon-title">影片製作中…</div>
+        <div class="card-excerpt coming-soon-excerpt">軟糖媽咪 Ivy 正在錄製這支教學影片，完成後會第一時間上線！</div>
+      </div>
+    </div>
+
+    <!-- 待上線 #9 -->
+    <div class="card" data-cat="樞紐分析" data-diff="進階">
+      <div class="video-wrap">
+        <div class="coming-soon-thumb">
+          <span class="cat-badge cat-樞紐分析">樞紐分析</span>
+          <span class="diff-badge diff-進階">進階</span>
+          <div class="coming-soon-inner">
+            <div class="coming-soon-icon">🎬</div>
+            <div class="coming-soon-text">即將上線</div>
+          </div>
+        </div>
+      </div>
+      <div class="body">
+        <div class="card-date">敬請期待</div>
+        <div class="card-title coming-soon-title">影片製作中…</div>
+        <div class="card-excerpt coming-soon-excerpt">軟糖媽咪 Ivy 正在錄製這支教學影片，完成後會第一時間上線！</div>
+      </div>
+    </div>
+
+    <div class="no-results" id="no-results">沒有符合的影片</div>
+  </div>
+
+</div>
+
+<script>
+  function playVideo(thumb, embedUrl) {
+    const wrap = thumb.parentElement;
+    const iframe = document.createElement('iframe');
+    iframe.src = embedUrl;
+    iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+    iframe.allowFullscreen = true;
+    iframe.style.cssText = 'width:100%;height:100%;border:none;display:block;';
+    wrap.innerHTML = '';
+    wrap.appendChild(iframe);
+  }
+
+  let activeCat = 'all', activeDiff = 'all';
+  function filterCards() {
+    const cards = document.querySelectorAll('#grid .card');
+    let visible = 0;
+    cards.forEach(card => {
+      const catOk = activeCat === 'all' || card.dataset.cat === activeCat;
+      const diffOk = activeDiff === 'all' || card.dataset.diff === activeDiff;
+      const show = catOk && diffOk;
+      card.classList.toggle('hidden', !show);
+      if (show) visible++;
+    });
+    document.getElementById('no-results').style.display = visible === 0 ? 'block' : 'none';
+  }
+  document.querySelectorAll('#cat-filters .pill').forEach(p => {
+    p.addEventListener('click', () => {
+      document.querySelectorAll('#cat-filters .pill').forEach(x => x.classList.remove('on'));
+      p.classList.add('on'); activeCat = p.dataset.cat; filterCards();
+    });
+  });
+  document.querySelectorAll('#diff-filters .pill').forEach(p => {
+    p.addEventListener('click', () => {
+      document.querySelectorAll('#diff-filters .pill').forEach(x => x.classList.remove('on'));
+      p.classList.add('on'); activeDiff = p.dataset.diff; filterCards();
+    });
+  });
+</script>
+</body>
+</html>
