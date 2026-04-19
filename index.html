@@ -35,6 +35,9 @@
   .social-btn svg { width: 14px; height: 14px; flex-shrink: 0; }
   .visitor-counter { display: flex; align-items: center; gap: 6px; font-size: 11px; color: #7aa0b0; white-space: nowrap; }
   .visitor-counter img { height: 18px; border-radius: 4px; }
+  .subscribe-btn { display: inline-flex; align-items: center; gap: 6px; padding: 7px 16px; border-radius: 20px; background: #ff0000; color: #fff !important; font-size: 12px; font-weight: 700; text-decoration: none; transition: background 0.2s; white-space: nowrap; }
+  .subscribe-btn:hover { background: #cc0000; }
+  .subscribe-btn svg { width: 14px; height: 14px; flex-shrink: 0; }
 
   /* Filters */
   .filters { display: flex; flex-direction: column; gap: 8px; margin-bottom: 1.5rem; background: rgba(255,255,255,0.75); border-radius: 14px; padding: 12px 14px; border: 1px solid #ccd8e4; }
@@ -147,6 +150,10 @@
           Facebook
         </a>
       </div>
+      <a class="subscribe-btn" href="https://youtube.com/channel/UC80zKCgzP-OPnzbIzzC47Rg?sub_confirmation=1" target="_blank">
+        <svg viewBox="0 0 24 24" fill="#fff"><path d="M23 7s-.3-2-1.2-2.8c-1.1-1.2-2.4-1.2-3-1.3C16.2 2.8 12 2.8 12 2.8s-4.2 0-6.8.1c-.6.1-1.9.1-3 1.3C1.3 5 1 7 1 7S.7 9.1.7 11.3v2c0 2.1.3 4.2.3 4.2s.3 2 1.2 2.8c1.1 1.2 2.6 1.1 3.3 1.2C7.5 21.6 12 21.6 12 21.6s4.2 0 6.8-.2c.6-.1 1.9-.1 3-1.3.9-.8 1.2-2.8 1.2-2.8s.3-2.1.3-4.2v-2C23.3 9.1 23 7 23 7zM9.7 15.5V8.4l8.1 3.6-8.1 3.5z"/></svg>
+        訂閱頻道
+      </a>
     </div>
   </div>
 
@@ -172,26 +179,91 @@
 
   <div class="grid" id="grid">
 
-    <!-- 待上線 #1 -->
-    <div class="card" data-cat="函數公式" data-diff="入門">
+    <!-- 不加班系列1：核取方塊 -->
+    <div class="card" data-cat="快捷技巧" data-diff="入門">
       <div class="video-wrap">
-        <div class="coming-soon-thumb">
-          <span class="cat-badge cat-函數公式">函數公式</span>
+        <div class="video-thumb" onclick="playVideo(this, 'https://www.youtube.com/embed/RG_J18z4z9k?autoplay=1')">
+          <img src="https://img.youtube.com/vi/RG_J18z4z9k/mqdefault.jpg" alt="核取方塊的應用" loading="lazy">
+          <span class="cat-badge cat-快捷技巧">快捷技巧</span>
           <span class="diff-badge diff-入門">入門</span>
-          <div class="coming-soon-inner">
-            <div class="coming-soon-icon">🎬</div>
-            <div class="coming-soon-text">即將上線</div>
-          </div>
+          <div class="play-btn"><svg viewBox="0 0 24 24" fill="#2a4a60"><polygon points="5,3 19,12 5,21"/></svg></div>
+          <span class="duration-badge">00:37</span>
         </div>
       </div>
       <div class="body">
-        <div class="card-date">敬請期待</div>
-        <div class="card-title coming-soon-title">影片製作中…</div>
-        <div class="card-excerpt coming-soon-excerpt">軟糖媽咪 Ivy 正在錄製這支教學影片，完成後會第一時間上線！</div>
+        <div class="card-date">不加班系列 #1</div>
+        <div class="card-title">核取方塊的應用｜核取方塊只有打勾的功能嗎</div>
+        <div class="card-excerpt">點完核取方塊後，就結束了嗎？還有讓他消失或是加上刪除線喔！快來學吧</div>
+        <div class="chips">
+          <a class="chip chip-yt" href="https://youtube.com/shorts/RG_J18z4z9k" target="_blank">▶ YouTube</a>
+        </div>
       </div>
     </div>
 
-    <!-- 待上線 #2 -->
+    <!-- 不加班系列2：銷售月報 -->
+    <div class="card" data-cat="進階應用" data-diff="進階">
+      <div class="video-wrap">
+        <div class="video-thumb" onclick="playVideo(this, 'https://www.youtube.com/embed/nT-r_xpW2oI?autoplay=1')">
+          <img src="https://img.youtube.com/vi/nT-r_xpW2oI/mqdefault.jpg" alt="銷售月報" loading="lazy">
+          <span class="cat-badge cat-進階應用">進階應用</span>
+          <span class="diff-badge diff-進階">進階</span>
+          <div class="play-btn"><svg viewBox="0 0 24 24" fill="#2a4a60"><polygon points="5,3 19,12 5,21"/></svg></div>
+          <span class="duration-badge">00:07</span>
+        </div>
+      </div>
+      <div class="body">
+        <div class="card-date">不加班系列 #2</div>
+        <div class="card-title">銷售月報｜不要再把時間花在每個月的例行性報告上了</div>
+        <div class="card-excerpt">常常需要花很多時間，手動複製貼上數字的例行性報告，現在你有更快的方法！只要按下重新整理，資料就會自動更新。</div>
+        <div class="chips">
+          <a class="chip chip-yt" href="https://youtube.com/shorts/nT-r_xpW2oI" target="_blank">▶ YouTube</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 不加班系列3：UNIQUE函數 -->
+    <div class="card" data-cat="函數公式" data-diff="入門">
+      <div class="video-wrap">
+        <div class="video-thumb" onclick="playVideo(this, 'https://www.youtube.com/embed/0JV3u8Cqgjo?autoplay=1')">
+          <img src="https://img.youtube.com/vi/0JV3u8Cqgjo/mqdefault.jpg" alt="UNIQUE函數" loading="lazy">
+          <span class="cat-badge cat-函數公式">函數公式</span>
+          <span class="diff-badge diff-入門">入門</span>
+          <div class="play-btn"><svg viewBox="0 0 24 24" fill="#2a4a60"><polygon points="5,3 19,12 5,21"/></svg></div>
+          <span class="duration-badge">00:26</span>
+        </div>
+      </div>
+      <div class="body">
+        <div class="card-date">不加班系列 #3</div>
+        <div class="card-title">UNIQUE 函數｜移除重複項目</div>
+        <div class="card-excerpt">除了手動移除重複項目，或是用 Excel 內建的移除重複，其實還有更快的方法！利用 UNIQUE 函數，馬上刪除重複資料，且還會自動更新。</div>
+        <div class="chips">
+          <a class="chip chip-yt" href="https://youtube.com/shorts/0JV3u8Cqgjo" target="_blank">▶ YouTube</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 不加班系列4：FILTER函數 -->
+    <div class="card" data-cat="函數公式" data-diff="入門">
+      <div class="video-wrap">
+        <div class="video-thumb" onclick="playVideo(this, 'https://www.youtube.com/embed/3VAg53-OVJQ?autoplay=1')">
+          <img src="https://img.youtube.com/vi/3VAg53-OVJQ/mqdefault.jpg" alt="FILTER函數" loading="lazy">
+          <span class="cat-badge cat-函數公式">函數公式</span>
+          <span class="diff-badge diff-入門">入門</span>
+          <div class="play-btn"><svg viewBox="0 0 24 24" fill="#2a4a60"><polygon points="5,3 19,12 5,21"/></svg></div>
+          <span class="duration-badge">00:33</span>
+        </div>
+      </div>
+      <div class="body">
+        <div class="card-date">不加班系列 #4</div>
+        <div class="card-title">FILTER 函數｜一次找到所有符合條件的資料，且資料會持續更新</div>
+        <div class="card-excerpt">學會這個公式後，你只要 10 秒就能找到你要的資料，且還會自動更新！不用再一筆一筆手動找了。</div>
+        <div class="chips">
+          <a class="chip chip-yt" href="https://youtube.com/shorts/3VAg53-OVJQ" target="_blank">▶ YouTube</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 待上線 #5 -->
     <div class="card" data-cat="樞紐分析" data-diff="入門">
       <div class="video-wrap">
         <div class="coming-soon-thumb">
@@ -210,26 +282,7 @@
       </div>
     </div>
 
-    <!-- 待上線 #3 -->
-    <div class="card" data-cat="函數公式" data-diff="進階">
-      <div class="video-wrap">
-        <div class="coming-soon-thumb">
-          <span class="cat-badge cat-函數公式">函數公式</span>
-          <span class="diff-badge diff-進階">進階</span>
-          <div class="coming-soon-inner">
-            <div class="coming-soon-icon">🎬</div>
-            <div class="coming-soon-text">即將上線</div>
-          </div>
-        </div>
-      </div>
-      <div class="body">
-        <div class="card-date">敬請期待</div>
-        <div class="card-title coming-soon-title">影片製作中…</div>
-        <div class="card-excerpt coming-soon-excerpt">軟糖媽咪 Ivy 正在錄製這支教學影片，完成後會第一時間上線！</div>
-      </div>
-    </div>
-
-    <!-- 待上線 #4 -->
+    <!-- 待上線 #6 -->
     <div class="card" data-cat="圖表" data-diff="進階">
       <div class="video-wrap">
         <div class="coming-soon-thumb">
@@ -248,7 +301,7 @@
       </div>
     </div>
 
-    <!-- 待上線 #5 -->
+    <!-- 待上線 #7 -->
     <div class="card" data-cat="資料整理" data-diff="進階">
       <div class="video-wrap">
         <div class="coming-soon-thumb">
@@ -267,50 +320,12 @@
       </div>
     </div>
 
-    <!-- 待上線 #6 -->
-    <div class="card" data-cat="快捷技巧" data-diff="入門">
-      <div class="video-wrap">
-        <div class="coming-soon-thumb">
-          <span class="cat-badge cat-快捷技巧">快捷技巧</span>
-          <span class="diff-badge diff-入門">入門</span>
-          <div class="coming-soon-inner">
-            <div class="coming-soon-icon">🎬</div>
-            <div class="coming-soon-text">即將上線</div>
-          </div>
-        </div>
-      </div>
-      <div class="body">
-        <div class="card-date">敬請期待</div>
-        <div class="card-title coming-soon-title">影片製作中…</div>
-        <div class="card-excerpt coming-soon-excerpt">軟糖媽咪 Ivy 正在錄製這支教學影片，完成後會第一時間上線！</div>
-      </div>
-    </div>
-
-    <!-- 待上線 #7 -->
-    <div class="card" data-cat="進階應用" data-diff="高手">
-      <div class="video-wrap">
-        <div class="coming-soon-thumb">
-          <span class="cat-badge cat-進階應用">進階應用</span>
-          <span class="diff-badge diff-高手">高手</span>
-          <div class="coming-soon-inner">
-            <div class="coming-soon-icon">🎬</div>
-            <div class="coming-soon-text">即將上線</div>
-          </div>
-        </div>
-      </div>
-      <div class="body">
-        <div class="card-date">敬請期待</div>
-        <div class="card-title coming-soon-title">影片製作中…</div>
-        <div class="card-excerpt coming-soon-excerpt">軟糖媽咪 Ivy 正在錄製這支教學影片，完成後會第一時間上線！</div>
-      </div>
-    </div>
-
     <!-- 待上線 #8 -->
-    <div class="card" data-cat="快捷技巧" data-diff="入門">
+    <div class="card" data-cat="快捷技巧" data-diff="進階">
       <div class="video-wrap">
         <div class="coming-soon-thumb">
           <span class="cat-badge cat-快捷技巧">快捷技巧</span>
-          <span class="diff-badge diff-入門">入門</span>
+          <span class="diff-badge diff-進階">進階</span>
           <div class="coming-soon-inner">
             <div class="coming-soon-icon">🎬</div>
             <div class="coming-soon-text">即將上線</div>
@@ -325,11 +340,11 @@
     </div>
 
     <!-- 待上線 #9 -->
-    <div class="card" data-cat="樞紐分析" data-diff="進階">
+    <div class="card" data-cat="進階應用" data-diff="高手">
       <div class="video-wrap">
         <div class="coming-soon-thumb">
-          <span class="cat-badge cat-樞紐分析">樞紐分析</span>
-          <span class="diff-badge diff-進階">進階</span>
+          <span class="cat-badge cat-進階應用">進階應用</span>
+          <span class="diff-badge diff-高手">高手</span>
           <div class="coming-soon-inner">
             <div class="coming-soon-icon">🎬</div>
             <div class="coming-soon-text">即將上線</div>
